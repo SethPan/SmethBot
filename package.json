@@ -1,0 +1,16 @@
+{
+  "name": "smethbot",
+  "version": "1.0.0",
+  "description": "Smeth is here",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
+    "request": "^2.88.2"
+  }
+}
