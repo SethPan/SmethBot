@@ -1,5 +1,5 @@
 import {bot} from './../bot'
-import { TextChannel } from "discord.js";
+import {TextChannel} from "discord.js";
 
 function anon(msg) {
     if (msg.content.startsWith('!anon ')) {
@@ -13,6 +13,10 @@ function anon(msg) {
             const anonMessage = messageArray.join(' ')
             if (!bot.channels.cache.get(channelID)) {
               msg.reply('The channel ID you gave me didn\'t work out.\nHere is an example using the ID from the main channel: \n!189542527496486919')
+              return
+            }
+            if (channelID.type !== TextChannel) {
+              msg.reply('The channel has to be a text channel, lol')
               return
             }
             (bot.channels.cache.get(channelID) as TextChannel).send(`${anonMessage}\n\t-**anonymous message**`)  
