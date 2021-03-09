@@ -1,4 +1,4 @@
-const bot = require('./../bot.js')
+import {bot} from './../bot'
 
 function anon(msg) {
     if (msg.content.startsWith('!anon ')) {
@@ -26,4 +26,4 @@ function anon(msg) {
       }
 }
 
-module.exports = anon;
+export {anon};

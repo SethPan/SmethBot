@@ -1,10 +1,10 @@
 require('dotenv').config();
-const Discord = require('discord.js');
-const fs = require('fs');
-const naruto = require('./modules/naruto.js');
-const anon = require('./modules/anon.js');
-const color = require('./modules/color.js')
-const bot = require("./bot.js")
+import Discord from 'discord.js'
+import fs from 'fs';
+import {naruto} from './modules/naruto';
+import {anon} from './modules/anon';
+import {color} from './modules/color'
+import {bot} from "./bot"
 
 bot.on('ready', () => {
   console.info(`Logged in as ${bot.user.tag}!`);

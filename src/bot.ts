@@ -1,7 +1,7 @@
-const Discord = require('discord.js');
+import Discord from 'discord.js';
 
 const bot = new Discord.Client();
 const TOKEN = process.env.TOKEN;
 bot.login(TOKEN);
 
-module.exports = bot;
+export {bot};

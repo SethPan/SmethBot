@@ -1,4 +1,4 @@
-const bot = require('./../bot.js')
+import {bot} from './../bot'
 
 function color(msg) {
     if (msg.content.startsWith('!color')) {
@@ -8,6 +8,4 @@ function color(msg) {
 
 
 
-
-
-module.exports = color
+export {color}

@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 function naruto(msg) {
     if (msg.content.startsWith('!naruto')) {
@@ -52,4 +52,4 @@ function naruto(msg) {
         } 
 }
 
-module.exports = naruto;
+export {naruto};
