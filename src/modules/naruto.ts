@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path'
 
 function naruto(msg) {
     if (msg.content.startsWith('!naruto')) {
@@ -9,7 +10,7 @@ function naruto(msg) {
         const narutoNames = ['Naruto Uzumaki', 'Sasuke Uchiha', 'Kakashi Hatake', 'Boruto Uzumaki', 'Sarada Uchiha', 'Mitsuki', 'Konohamaru Sarutobi', 'Hinata Hyuga', 'Kiba Inuzuka', 'Akamaru', 'Shino Aburame', 'Kurenai Yuhi', 'Shikamaru Nara', 'Choji Akimichi', 'Ino Yamanaka', 'Asuma Sarutobi', 'Rock Lee', 'Neji Hyuga', 'Tenten', 'Might Guy', 'Gaara', 'Kankuro', 'Temari', 'Shikadai Nara', 'Chocho Akimichi', 'Inojin Yamanaka', 'Moegi Kazamatsuri', 'Sumire Kakei', 'Namida Suzumeno', 'Wasabi Izuno', 'Tsubaki Kurogane', 'Hanabi Hyuga', 'Metal Lee', 'Iwabi Yuino', 'Denki Kaminarimon', 'Udon Ise', 'Zabuza Momochi', 'Haku', 'Orochimaru', 'Kabuto Yakushi', 'Zetsu', 'Kisame Hoshigaki', 'Konan', 'Nagato', 'Itachi Uchiha', 'Deidara', 'Kakuzu', 'Sasori', 'Iruka Umino', 'Hokage', 'Tsunade', 'Jiraiya', 'Sai', 'Yamato', 'Killer Bee', 'Hagoromo Otsutsuki', 'A', 'Darui', 'Karui', 'Chiyo', 'Mei Terumi', 'Chojuro', 'Ao', 'Gengetsu Hozuki', 'Onoki', 'Kurotsuchi', 'Akatsuchi', 'Kurama', 'Taka', 'Suigetsu Hozuki', 'Karin', 'Jugo', 'Kushina Uzumaki', 'Kawaki'];
         const originalName = msg.member.displayName
         msg.member.setNickname(narutoNames[Math.floor(Math.random() * 74)]);
-        const data = fs.readFileSync(__dirname + '/../names.json')
+        const data = fs.readFileSync(path.join(__dirname, '..', '..', '..', 'src', 'names.json'))
         //@ts-ignore
         const savedNamesPasswordsTimes = JSON.parse(data)
         const role = msg.guild.roles.cache.find(r => r.name === "dudes")
@@ -19,7 +20,7 @@ function naruto(msg) {
         const endTime = new Date();
         endTime.setHours(endTime.getHours() + 2);
         savedNamesPasswordsTimes[msg.author.id] = {previousName: originalName, savedPassword, endTime}
-        fs.writeFile(__dirname + '/../names.json', JSON.stringify(savedNamesPasswordsTimes), (err) => {
+        fs.writeFile(path.join(__dirname, '..', '..', '..', 'src', 'names.json'), JSON.stringify(savedNamesPasswordsTimes), (err) => {
             if (err) throw err;
         });
         msg.member.send(`This is your password: ${password} \n Send this in chat any time after ${endTime.toLocaleTimeString()} to get your old name back. Have fun with your new identity!`)} 
@@ -28,7 +29,7 @@ function naruto(msg) {
     if (msg.content.startsWith('!_')) {
         const typedPassword = msg.content.split('_')[1]     
         //@ts-ignore
-        let savedNamesPasswordsTimes = JSON.parse(fs.readFileSync(__dirname + `/../names.json`));
+        let savedNamesPasswordsTimes = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', '..', 'src', 'names.json')));
         if (!savedNamesPasswordsTimes[msg.author.id]) 
             return
         
@@ -50,7 +51,7 @@ function naruto(msg) {
             delete savedNamesPasswordsTimes[msg.author.id]
             }  
         }
-            fs.writeFileSync(__dirname + '/../names.json', JSON.stringify(savedNamesPasswordsTimes))                         
+            fs.writeFileSync(path.join(__dirname, '..', '..', '..', 'src', 'names.json'), JSON.stringify(savedNamesPasswordsTimes))                         
         } 
 }
 
