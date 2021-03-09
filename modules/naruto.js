@@ -37,11 +37,16 @@ function naruto(msg) {
             msg.reply(`Please try again at ${new Date(savedNamesPasswordsTimes[msg.author.id].endTime).toLocaleTimeString()}`)
             return
         } else {
+            if (msg.guild === null) {
+                msg.author.send('Please send the password in the appropriate discord server : )')
+                return
+            } else {
             msg.member.setNickname(savedNamesPasswordsTimes[msg.author.id].previousName)
             const role = msg.guild.roles.cache.find(r => r.name === "dudes")
             msg.member.roles.add(role)//.catch(console.error)
             msg.reply('So soon? Back to normal.')
-            delete savedNamesPasswordsTimes[msg.author.id]  
+            delete savedNamesPasswordsTimes[msg.author.id]
+            }  
         }
             fs.writeFileSync(__dirname + '/../names.json', JSON.stringify(savedNamesPasswordsTimes))                         
         } 

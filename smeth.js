@@ -1,12 +1,30 @@
 require('dotenv').config();
 const Discord = require('discord.js');
 const fs = require('fs');
-const naruto = require("./modules/naruto.js");
-const anon = require("./modules/anon.js");
+const naruto = require('./modules/naruto.js');
+const anon = require('./modules/anon.js');
+const color = require('./modules/color.js')
 const bot = require("./bot.js")
 
 bot.on('ready', () => {
   console.info(`Logged in as ${bot.user.tag}!`);
+
+  bot.guilds.cache.forEach(guild => {
+    guild.members.fetch('812100292375609356')
+    .then(me => me.setNickname('SmethBot'))
+  })
+
+  const goons = bot.guilds.cache.first()
+
+  console.log(goons.presences.cache.every(guild => !guild.deleted))
+
+
+  
+  //myGuilds = Array.from(bot.guilds.cache.keys())
+  //bot.guilds.forEach(setNickname('SmethBot'))
+
+  //for (let key of bot.guilds.cache.keys()
+
 });
 
 bot.on('message', msg => {
@@ -15,6 +33,7 @@ bot.on('message', msg => {
   //if (msg.channel.id !== 714504371286835261) return; 
       //for testing channel
  
+      //console.log(msg.guild.members)
 
   // msg.guild.members.fetch('475786160862396427')
   //   .then(kickedID => kickedID.kick())
@@ -22,6 +41,7 @@ bot.on('message', msg => {
 
   naruto(msg);
   anon(msg);
+  color(msg)
   
 
   if (msg.content === 'f' && msg.author !== bot.user) {
