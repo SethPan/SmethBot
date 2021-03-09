@@ -10,6 +10,7 @@ function naruto(msg) {
         const originalName = msg.member.displayName
         msg.member.setNickname(narutoNames[Math.floor(Math.random() * 74)]);
         const data = fs.readFileSync(__dirname + '/../names.json')
+        //@ts-ignore
         const savedNamesPasswordsTimes = JSON.parse(data)
         const role = msg.guild.roles.cache.find(r => r.name === "dudes")
         msg.member.roles.remove(role)//.catch(console.error)
@@ -26,6 +27,7 @@ function naruto(msg) {
 
     if (msg.content.startsWith('!_')) {
         const typedPassword = msg.content.split('_')[1]     
+        //@ts-ignore
         let savedNamesPasswordsTimes = JSON.parse(fs.readFileSync(__dirname + `/../names.json`));
         if (!savedNamesPasswordsTimes[msg.author.id]) 
             return
