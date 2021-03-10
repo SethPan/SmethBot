@@ -1,5 +1,5 @@
 require('dotenv').config();
-import Discord from 'discord.js'
+import Discord, { TextChannel } from 'discord.js'
 import fs from 'fs';
 import {naruto} from './modules/naruto';
 import {anon} from './modules/anon';

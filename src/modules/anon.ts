@@ -8,18 +8,17 @@ function anon(msg) {
           if (messageArray[1].startsWith('!')) {
             let channelIDCommand = messageArray[1].split('')
             channelIDCommand.splice(0, 1)
-            const channelID = channelIDCommand.join('')
+            const channelIDString = channelIDCommand.join('')
             messageArray.splice(0, 2)
             const anonMessage = messageArray.join(' ')
-            if (!bot.channels.cache.get(channelID)) {
+            if (!bot.channels.cache.get(channelIDString)) {
               msg.reply('The channel ID you gave me didn\'t work out.\nHere is an example using the ID from the main channel: \n!189542527496486919')
               return
-            }
-            if (channelID.type !== TextChannel) {
+            } if (!(bot.channels.cache.get(channelIDString) as TextChannel)) {
               msg.reply('The channel has to be a text channel, lol')
               return
             }
-            (bot.channels.cache.get(channelID) as TextChannel).send(`${anonMessage}\n\t-**anonymous message**`)  
+            (bot.channels.cache.get(channelIDString) as TextChannel).send(`${anonMessage}\n\t-**anonymous message**`)  
           } else {
           messageArray.splice(0, 1)
           const anonMessage = messageArray.join(' ');
