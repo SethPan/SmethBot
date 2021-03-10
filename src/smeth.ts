@@ -1,10 +1,10 @@
 require('dotenv').config();
-import Discord, { TextChannel } from 'discord.js'
+import Discord, { TextChannel } from 'discord.js';
 import fs from 'fs';
 import {naruto} from './modules/naruto';
 import {anon} from './modules/anon';
-import {color} from './modules/color'
-import {bot} from "./bot"
+import {botcolor} from './modules/botcolor';
+import {bot} from "./bot";
 
 bot.on('ready', () => {
   console.info(`Logged in as ${bot.user.tag}!`);
@@ -12,13 +12,9 @@ bot.on('ready', () => {
   bot.guilds.cache.forEach(guild => {
     guild.members.fetch('812100292375609356')
     .then(me => me.setNickname('SmethBot'))
-  })
-
-  const goons = bot.guilds.cache.first()
+  });
 
   // console.log(goons.presences.cache.every(guild => !guild.deleted))
-
-
   
   //myGuilds = Array.from(bot.guilds.cache.keys())
   //bot.guilds.forEach(setNickname('SmethBot'))
@@ -41,7 +37,7 @@ bot.on('message', msg => {
 
   naruto(msg);
   anon(msg);
-  color(msg)
+  botcolor(msg);
   
 
   if (msg.content === 'f' && msg.author !== bot.user) {
