@@ -12,14 +12,15 @@ function naruto(msg) {
         msg.member.setNickname(narutoNames[Math.floor(Math.random() * 74)]);
         const data = fs.readFileSync(path.join(__dirname, '..', '..', '..', 'src', 'names.json'))
         //@ts-ignore
-        const savedNamesPasswordsTimes = JSON.parse(data)
+        const savedNamesPasswordsTimes: object = JSON.parse(data)
         const role = msg.guild.roles.cache.find(r => r.name === "dudes")
         msg.member.roles.remove(role)//.catch(console.error)
         const password = '!_' + Math.random().toString(36).substring(7);
         const savedPassword = password.split('_')[1]
         const endTime = new Date();
         endTime.setHours(endTime.getHours() + 2);
-        savedNamesPasswordsTimes[msg.author.id] = {previousName: originalName, savedPassword, endTime}
+        const userID = msg.author.id
+        savedNamesPasswordsTimes[userID] = {previousName: originalName, savedPassword, endTime}
         fs.writeFile(path.join(__dirname, '..', '..', '..', 'src', 'names.json'), JSON.stringify(savedNamesPasswordsTimes), (err) => {
             if (err) throw err;
         });
@@ -29,7 +30,7 @@ function naruto(msg) {
     if (msg.content.startsWith('!_')) {
         const typedPassword = msg.content.split('_')[1]     
         //@ts-ignore
-        let savedNamesPasswordsTimes = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', '..', 'src', 'names.json')));
+        let savedNamesPasswordsTimes: object = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', '..', 'src', 'names.json')));
         if (!savedNamesPasswordsTimes[msg.author.id]) 
             return
         
