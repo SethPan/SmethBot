@@ -29,8 +29,6 @@ bot.on('message', msg => {
   //if (msg.channel.id !== 714504371286835261) return; 
       //for testing channel
  
-      //console.log(msg.guild.members)
-
   // msg.guild.members.fetch('475786160862396427')
   //   .then(kickedID => kickedID.kick())
              //(code to kick)
