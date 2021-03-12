@@ -9,6 +9,8 @@ import {bot} from "./bot";
 bot.on('ready', () => {
   console.info(`Logged in as ${bot.user.tag}!`);
 
+  //console.log(bot.guilds.cache.find(guild => guild.id === '189542527496486919').channels)
+
   bot.guilds.cache.forEach(guild => {
     guild.members.fetch('812100292375609356')
     .then(me => me.setNickname('SmethBot'))

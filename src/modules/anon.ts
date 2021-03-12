@@ -35,31 +35,44 @@ function anon(msg) {
           if (guild.members.cache.keyArray().includes(msg.author.id)) {
             commonGuilds.push(guild)
           }
-          });
+        });
         if (commonGuilds.length === 1) {
-          const guildChannelNames = []
-          commonGuilds[0].channels.forEach(channel => guildChannelNames.push(channel.name))
-          const guildChannelIDs = []
-          commonGuilds[0].channels.forEach(channel => guildChannelIDs.push(channel.id))   
+          const guildChannelNames = [];
+        bot.guilds.cache.find(guild => guild.id === commonGuilds[0].id)
+        .channels.cache.forEach(channel => {
+          if (channel.type === 'text') {
+            guildChannelNames.push(channel.name)
+          }
+        })   
+        const guildChannelIDs = [];
+        bot.guilds.cache.find(guild => guild.id === commonGuilds[0].id)
+        .channels.cache.forEach(channel => {
+          if (channel.type === 'text') {
+            guildChannelIDs.push(channel.id)
+          }
+        })   
           const guildChannelNamesString = guildChannelNames.map((name, index) => `${index + 1}. ${name}`).join('\n');  
           const rawData= fs.readFileSync(path.join(__dirname, '..', '..', '..', 'src', 'data.json'));
           //@ts-ignore;
           const anonMessageChannelChoice: object  = JSON.parse(rawData);
-          (bot.channels.cache.get(commonGuilds[0].id) as TextChannel)
-            .send(`${anonMessage}\n\t-**anonymous message**`);
-            return;
-          } 
+          const senderID = msg.author.id;
+          anonMessageChannelChoice[senderID] = {anonChannelSelect: {guildChannelIDs: guildChannelIDs, message: `${anonMessage}\n\t-**anonymous message**`}};
+          fs.writeFile(path.join(__dirname, '..', '..', '..', 'src', 'data.json'), JSON.stringify(anonMessageChannelChoice), (err) => {
+            if (err) throw err;
+          });
+          msg.reply(`The discord server "${commonGuilds[0].name}" has ${guildChannelIDs.length} text channels.\nPlease type the number of the channel you would like to send your anonymous message to:\n${guildChannelNamesString}`)
+        } 
         if (commonGuilds.length > 1) {
           const commonGuildNames = []
           commonGuilds.forEach(guild => commonGuildNames.push(guild.name))
           const commonGuildIDs = []
           commonGuilds.forEach(guild => commonGuildIDs.push(guild.id))   
           const commonGuildNameString = commonGuildNames.map((name, index) => `${index + 1}. ${name}`).join('\n');  
-          const rawData= fs.readFileSync(path.join(__dirname, '..', '..', '..', 'src', 'data.json'));
+          const rawData = fs.readFileSync(path.join(__dirname, '..', '..', '..', 'src', 'data.json'));
           //@ts-ignore;
           const anonMessageServerChoice: object  = JSON.parse(rawData);
           const senderID = msg.author.id;
-          anonMessageServerChoice[senderID] = {anonServerSelect: {commonGuildIDs: commonGuildIDs, message: `${anonMessage}\n\t-**anonymous message**`}}
+          anonMessageServerChoice[senderID] = {anonServerSelect: {commonGuildIDs: commonGuildIDs, message: `${anonMessage}\n\t-**anonymous message**`}};
           fs.writeFile(path.join(__dirname, '..', '..', '..', 'src', 'data.json'), JSON.stringify(anonMessageServerChoice), (err) => {
             if (err) throw err;
           });
@@ -76,12 +89,38 @@ function anon(msg) {
       if (anonMessageServerChoice[senderID] === undefined){
         return;
       }
-      if (anonMessageServerChoice[senderID].anonServerSelect && !isNaN(msg.content) && Number(msg.content) <= (anonMessageServerChoice[msg.author.id].anonServerSelect.commonGuildIDs.length + 1)) {
-        const chosenGuild = anonMessageServerChoice[msg.author.id].anonServerSelect.commonGuildIDs[Number(msg.content) - 1];
-        const message = anonMessageServerChoice[msg.author.id].anonServerSelect.message;
-        (bot.channels.cache.get(chosenGuild) as TextChannel)
+      if (anonMessageServerChoice[senderID].anonChannelSelect && !isNaN(msg.content) && Number(msg.content) <= (anonMessageServerChoice[msg.author.id].anonChannelSelect.guildChannelIDs.length + 1) && Number.isInteger(Number(msg.content))) {
+        const chosenChannel = anonMessageServerChoice[senderID].anonChannelSelect.guildChannelIDs[Number(msg.content) - 1];
+        const message = anonMessageServerChoice[senderID].anonChannelSelect.message;
+        (bot.channels.cache.get(chosenChannel) as TextChannel)
           .send(message);
-        delete anonMessageServerChoice[msg.author.id].anonServerSelect;
+        delete anonMessageServerChoice[senderID].anonChannelSelect;
+        fs.writeFile(path.join(__dirname, '..', '..', '..', 'src', 'data.json'), JSON.stringify(anonMessageServerChoice), (err) => {
+          if (err) throw err;
+        });
+        return;
+      }
+      if (anonMessageServerChoice[senderID].anonServerSelect && !isNaN(msg.content) && Number(msg.content) <= (anonMessageServerChoice[msg.author.id].anonServerSelect.commonGuildIDs.length + 1) && Number.isInteger(Number(msg.content))) {
+        const chosenGuild = anonMessageServerChoice[senderID].anonServerSelect.commonGuildIDs[Number(msg.content) - 1];
+        const message = anonMessageServerChoice[senderID].anonServerSelect.message;
+        const guildChannelNames = [];
+        bot.guilds.cache.find(guild => guild.id === chosenGuild)
+        .channels.cache.forEach(channel => {
+          if (channel.type === 'text') {
+            guildChannelNames.push(channel.name)
+          }
+        })   
+        const guildChannelIDs = [];
+        bot.guilds.cache.find(guild => guild.id === chosenGuild)
+        .channels.cache.forEach(channel => {
+          if (channel.type === 'text') {
+            guildChannelIDs.push(channel.id)
+          }
+        })   
+        const guildChannelNamesString = guildChannelNames.map((name, index) => `${index + 1}. ${name}`).join('\n');  
+        anonMessageServerChoice[senderID] = {anonChannelSelect: {guildChannelIDs: guildChannelIDs, message: `${message}`}};
+        delete anonMessageServerChoice[senderID].anonServerSelect;
+        msg.reply(`The discord server "${chosenGuild.name}" has ${guildChannelIDs.length} text channels.\nPlease type the number of the channel you would like to send your anonymous message to:\n${guildChannelNamesString}`)
         fs.writeFile(path.join(__dirname, '..', '..', '..', 'src', 'data.json'), JSON.stringify(anonMessageServerChoice), (err) => {
           if (err) throw err;
         });
@@ -90,6 +129,5 @@ function anon(msg) {
     }
   } 
 }
-
 
 export {anon};
