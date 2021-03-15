@@ -167,8 +167,9 @@ function naruto(msg) {
         } to get your old name, and nickname permissions back.\nHave fun with your new identity!`
       );
     }
+  } else {
+    handlePassword(msg);
   }
-  handlePassword(msg);
 }
 
 export { naruto };
