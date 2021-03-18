@@ -1,5 +1,5 @@
 require("dotenv").config();
-import Discord, { TextChannel } from "discord.js";
+//import Discord, { TextChannel } from "discord.js";
 import fs from "fs";
 import { naruto } from "./modules/naruto";
 import { anon } from "./modules/anon";
@@ -8,20 +8,32 @@ import { bot } from "./bot";
 import { displayAvatar } from "./modules/avatar";
 import { f } from "./modules/f";
 import { kick } from "./modules/kick";
+import { help } from "./modules/help";
+import { roleManagement } from "./modules/roleManagement";
 
 bot.on("ready", () => {
   console.info(`Logged in as ${bot.user.tag}!`);
 
-  bot.guilds.cache.forEach((guild) => {
-    guild.members
-      .fetch("812100292375609356")
-      .then((me) => me.setNickname("SmethBot"));
-  });
+  roleManagement();
+
+  function resetSmethBotNickname() {
+    bot.guilds.cache.forEach((guild) => {
+      guild.members
+        .fetch("812100292375609356")
+        .then((me) => me.setNickname("SmethBot"));
+    });
+  }
+  resetSmethBotNickname();
 });
 
 bot.on("message", (msg) => {
   //if (msg.channel.id !== 714504371286835261) return;
   //for testing channel
+
+  // console.log(
+  //   msg.guild.roles.cache.find((role) => role.name === "SmethBopt") ===
+  //     undefined
+  // );
 
   // msg.guild.members.fetch('475786160862396427')
   //   .then(kickedID => kickedID.kick())
@@ -33,6 +45,7 @@ bot.on("message", (msg) => {
   displayAvatar(msg);
   f(msg);
   kick(msg);
+  help(msg);
 
   // if (msg.content.startsWith('!hack')) {
   //   if (GET(taggedUser.mfa_enabled) === false) {

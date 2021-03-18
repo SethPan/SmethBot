@@ -55,6 +55,12 @@ function handlePassword(msg) {
 function naruto(msg) {
   const userID = msg.author.id;
   if (msg.content.startsWith("!naruto")) {
+    if (msg.guild === null) {
+      msg.reply(
+        "This command changes your nickname in a discord server. Sending it via private message don't work."
+      );
+      return;
+    }
     if (msg.member.hasPermission("CHANGE_NICKNAME") === false) {
       msg.reply(`You're stuck with ${msg.member.displayName} for now.`);
       return;

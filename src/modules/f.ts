@@ -2,7 +2,7 @@ import Discord from "discord.js";
 import { bot } from "./../bot";
 
 function f(msg) {
-  if (msg.content === "f" && msg.author !== bot.user) {
+  if (msg.content.toLowerCase() === "f" && msg.author !== bot.user) {
     //msg.channel.send('_**F**_')
     const fEmbed = new Discord.MessageEmbed()
       .setColor("#f55742")
