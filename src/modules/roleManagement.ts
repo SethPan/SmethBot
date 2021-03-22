@@ -3,11 +3,8 @@ import { TeamMember } from "discord.js";
 import { bot } from "./../bot";
 import { f } from "./f";
 
-const archetypeGuild = bot.guilds.cache.find(
-  (guild) => guild.id === "408000941078347796"
-);
-
 function getRoleToCopy(roleName) {
+  const archetypeGuild = bot.guilds.cache.get("408000941078347796");
   console.log(
     archetypeGuild.roles.cache.find((role) => role.name === roleName)
   );
@@ -73,9 +70,7 @@ function asyncAddingRoleToUser(role, member) {
 }
 
 function copyAndAddRolesToServersAndAddUsersToRoles(roleName) {
-  const roleToClone = archetypeGuild.roles.cache.find(
-    (role) => role.name === roleName
-  );
+  const roleToClone = getRoleToCopy(roleName);
   console.log("\n\n\n\n" + roleToClone + "\n\n\n\n");
   matchThenAddRolesToServers(roleToClone);
   addUsersToRoles(roleToClone);
