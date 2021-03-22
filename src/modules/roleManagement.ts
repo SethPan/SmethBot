@@ -8,10 +8,13 @@ function getRoleToCopy(roleName) {
   console.log(
     archetypeGuild.roles.cache.find((role) => role.name === roleName)
   );
-  return archetypeGuild.roles.cache.find((role) => role.name === roleName);
+  const roleToCopy = archetypeGuild.roles.cache.find(
+    (role) => role.name === roleName
+  );
+  return roleToCopy;
 }
 function findGuildsLackingRole(roleSearchedFor) {
-  let matchingGuilds = [];
+  const matchingGuilds = [];
   bot.guilds.cache.forEach((guild) => {
     if (!guild.roles.cache.find((role) => role.name === roleSearchedFor.name)) {
       matchingGuilds.push(guild);
