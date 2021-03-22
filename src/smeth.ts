@@ -30,10 +30,7 @@ bot.on("message", (msg) => {
   //if (msg.channel.id !== 714504371286835261) return;
   //for testing channel
 
-  // console.log(
-  //   msg.guild.roles.cache.find((role) => role.name === "SmethBopt") ===
-  //     undefined
-  // );
+  //console.log(msg.guild.roles.cache.first().permissions.serialize());
 
   // msg.guild.members.fetch('475786160862396427')
   //   .then(kickedID => kickedID.kick())

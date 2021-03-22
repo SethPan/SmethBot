@@ -1,37 +1,124 @@
 //import Discord, { Guild } from "discord.js";
+import { TeamMember } from "discord.js";
 import { bot } from "./../bot";
+import { f } from "./f";
+
+const archetypeGuild = bot.guilds.cache.find(
+  (guild) => guild.id === "408000941078347796"
+);
 
 function getRoleToCopy(roleName) {
-  return bot.guilds
-    .fetch("408000941078347796")
-    .then((guild) => guild.roles.cache.find((role) => role.name === roleName));
+  console.log(
+    archetypeGuild.roles.cache.find((role) => role.name === roleName)
+  );
+  return archetypeGuild.roles.cache.find((role) => role.name === roleName);
 }
-function findGuildsLackingRole(roleName) {
+function findGuildsLackingRole(roleSearchedFor) {
   let matchingGuilds = [];
   bot.guilds.cache.forEach((guild) => {
-    if (guild.roles.cache.find((role) => role.name === roleName) === null) {
+    if (!guild.roles.cache.find((role) => role.name === roleSearchedFor.name)) {
       matchingGuilds.push(guild);
     }
   });
   return matchingGuilds;
 }
-function addRoleToServer(role, guild) {
+function createRoleInServer(role, guild) {
   guild.roles.create({ data: role });
 }
-async function matchRolesToServers(roleList) {
-  roleList.forEach((role) => {
-    const guilds = findGuildsLackingRole(role);
-    let i = 0;
-    for (i = 0; i < guilds.length; i++) {
-      addRoleToServer(role, guilds[i]);
-    }
-  });
+function matchThenAddRolesToServers(roleToClone) {
+  const guilds = findGuildsLackingRole(roleToClone);
+  for (let i = 0; i < guilds.length; i++) {
+    createRoleInServer(roleToClone, guilds[i]);
+  }
+  return roleToClone;
 }
 
-async function roleManagement() {
-  const nicknameRole = await getRoleToCopy("nickname");
-  const roleList = [nicknameRole];
-  matchRolesToServers(roleList);
+function createPermissionObject(guilds) {
+  const permissionsPerRolePerGuild = {};
+  guilds.forEach((guild) => {
+    const guildID = guild.id;
+    permissionsPerRolePerGuild[guildID] = {};
+    guild.roles.cache.forEach((role) => {
+      const roleName = role.name;
+      const roleID = role.id;
+      const permissions = role.permissions.serialize();
+      permissionsPerRolePerGuild[guildID][roleID] = {
+        roleName,
+        permissions,
+      };
+    });
+  });
+  return permissionsPerRolePerGuild;
+}
+
+function rolePermissionsPerServer() {
+  const guilds = bot.guilds.cache;
+  const permissionsPerRolePerServer = createPermissionObject(guilds);
+  return permissionsPerRolePerServer;
+} //to be saved for later use
+
+function addUsersToRoles(role) {
+  const roleName = role.name;
+  bot.guilds.cache.forEach((guild) =>
+    guild.members.cache.forEach((member) => {
+      if (member.hasPermission(roleName)) {
+        asyncAddingRoleToUser(role, member);
+      }
+    })
+  );
+}
+
+function asyncAddingRoleToUser(role, member) {
+  member.roles.add(role);
+}
+
+function copyAndAddRolesToServersAndAddUsersToRoles(roleName) {
+  const roleToClone = archetypeGuild.roles.cache.find(
+    (role) => role.name === roleName
+  );
+  console.log("\n\n\n\n" + roleToClone + "\n\n\n\n");
+  matchThenAddRolesToServers(roleToClone);
+  addUsersToRoles(roleToClone);
+  //console.log(rolePermissionsPerServer());
+}
+
+function roleManagement() {
+  const permissionRoleNames = [
+    // "CREATE_INSTANT_INVITE",
+    // "KICK_MEMBERS",
+    // "BAN_MEMBERS",
+    // "ADMINISTRATOR",
+    // "MANAGE_CHANNELS",
+    // "MANAGE_GUILD",
+    // "ADD_REACTIONS",
+    // "VIEW_AUDIT_LOG",
+    // "PRIORITY_SPEAKER",
+    // "STREAM",
+    // "VIEW_CHANNEL",
+    // "SEND_MESSAGES",
+    // "SEND_TTS_MESSAGES",
+    // "MANAGE_MESSAGES",
+    // "EMBED_LINKS",
+    // "ATTACH_FILES",
+    // "READ_MESSAGE_HISTORY",
+    // "MENTION_EVERYONE",
+    // "USE_EXTERNAL_EMOJIS",
+    // "VIEW_GUILD_INSIGHTS",
+    // "CONNECT",
+    // "SPEAK",
+    // "MUTE_MEMBERS",
+    // "DEAFEN_MEMBERS",
+    // "MOVE_MEMBERS",
+    // "USE_VAD",
+    "CHANGE_NICKNAME",
+    // "MANAGE_NICKNAMES",
+    // "MANAGE_ROLES",
+    // "MANAGE_WEBHOOKS",
+    // "MANAGE_EMOJIS",
+  ];
+  permissionRoleNames.forEach((name) =>
+    copyAndAddRolesToServersAndAddUsersToRoles(name)
+  );
 }
 
 export { roleManagement };
