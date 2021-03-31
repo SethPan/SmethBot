@@ -1,8 +1,8 @@
 //import Discord, { Guild } from "discord.js";
-import { TeamMember } from "discord.js";
 import { bot } from "./../bot";
-import { f } from "./f";
-import fs from "fs";
+
+const Database = require("better-sqlite3");
+const db = new Database("smethbot.db", { verbose: console.log });
 
 function getRoleToCopy(roleName) {
   const archetypeGuild = bot.guilds.cache.find(
@@ -127,7 +127,7 @@ function roleManagement() {
   permissionRoleNames.forEach((name) =>
     copyAndAddRolesToServersAndAddUsersToRoles(name)
   );
-  //console.log(rolePermissionsPerServer(permissionRoleNames));
+  console.log(rolePermissionsPerServer(permissionRoleNames));
 }
 
 export { roleManagement };
