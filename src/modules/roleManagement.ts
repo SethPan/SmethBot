@@ -43,6 +43,8 @@ function createPermissionObject(guilds, permissionRoleNames) {
     guild.roles.cache.forEach((role) => {
       const roleName = role.name;
       const roleID = role.id;
+      //if (roleName === "new role") role.delete();
+      //^purpose is to remove incorrect roles created from testing
       if (!permissionRoleNames.includes(roleName) && !role.managed) {
         const permissions = role.permissions.serialize();
         permissionsPerRolePerGuild[guildID][roleID] = {
@@ -62,7 +64,12 @@ function rolePermissionsPerServer(permissionRoleNames) {
     permissionRoleNames
   );
   return permissionsPerRolePerServer;
-} //to be saved for later use
+}
+
+function storePermissionTemplatesInDB(permissionRoleNames) {
+  //console.log(rolePermissionsPerServer(permissionRoleNames));
+  db.prepare("CREATE TABLE ");
+}
 
 function addUsersToRoles(role) {
   const roleName = role.name;
@@ -88,7 +95,9 @@ function copyAndAddRolesToServersAndAddUsersToRoles(name) {
   addUsersToRoles(roleToClone);
 }
 
-function removePermissionsFromOldRoles() {}
+function removePermissionsFromOldRoles() {
+  //write this after storage
+}
 
 function roleManagement() {
   const permissionRoleNames = [
@@ -127,7 +136,7 @@ function roleManagement() {
   permissionRoleNames.forEach((name) =>
     copyAndAddRolesToServersAndAddUsersToRoles(name)
   );
-  console.log(rolePermissionsPerServer(permissionRoleNames));
+  storePermissionTemplatesInDB(permissionRoleNames);
 }
 
 export { roleManagement };
