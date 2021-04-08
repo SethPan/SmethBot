@@ -10,7 +10,7 @@ function getRoleToCopy(roleName) {
   );
   const roleToCopy = archetypeGuild.roles.cache.find(
     (role) => role.name === roleName
-  );
+  ); 
   return roleToCopy;
 }
 function findGuildsLackingRole(roleSearchedFor) {
@@ -56,6 +56,7 @@ function rolePermissionsPerServer() {
   const permissionsPerRolePerServer = createPermissionObject(guilds);
   return permissionsPerRolePerServer;
 } //to be saved for later use
+
 
 function addUsersToRoles(role) {
   const roleName = role.name;
