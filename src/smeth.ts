@@ -1,4 +1,8 @@
 require("dotenv").config();
+
+//require('source-map-support').install()
+    //thing for better errors
+
 //import Discord, { TextChannel } from "discord.js";
 import fs from "fs";
 import { naruto } from "./modules/naruto";
@@ -10,6 +14,9 @@ import { f } from "./modules/f";
 import { kick } from "./modules/kick";
 import { help } from "./modules/help";
 import { roleManagement } from "./modules/roleManagement";
+
+//process.on('unhandledRejection', console.log)
+  //thing for better errors
 
 bot.on("ready", () => {
   console.info(`Logged in as ${bot.user.tag}!`);
@@ -25,7 +32,6 @@ bot.on("ready", () => {
   }
   resetSmethBotNickname();
 });
-
 bot.on("message", (msg) => {
   //if (msg.channel.id !== 714504371286835261) return;
   //for testing channel

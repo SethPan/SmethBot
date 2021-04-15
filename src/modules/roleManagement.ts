@@ -1,5 +1,5 @@
-//import Discord, { Guild } from "discord.js";
 import { bot } from "./../bot";
+
 
 const Database = require("better-sqlite3");
 const db = new Database("smethbot.db", { verbose: console.log });
@@ -67,8 +67,32 @@ function rolePermissionsPerServer(permissionRoleNames) {
 }
 
 function storePermissionTemplatesInDB(permissionRoleNames) {
-  //console.log(rolePermissionsPerServer(permissionRoleNames));
-  db.prepare("CREATE TABLE ");
+  interface templateObj {
+    [key: string]: any
+  };
+  const templateObj = rolePermissionsPerServer(permissionRoleNames)
+  const obj = Object.values(templateObj)
+  const guilds = Object.keys(templateObj)
+  const roles = []
+  for (let i = 0; i < guilds.length; i++) {
+    roles.push(Object.keys(obj[i]))
+  }
+  const guildsToRoles = {guildIDs: guilds, roleIDs: roles}
+    
+  console.log(guildsToRoles)
+  
+  //console.log(permissionRoleNames)
+  //createTables();
+}
+
+function createTables() {
+  db.prepare(`CREATE TABLE IF NOT EXISTS rolesInGuilds (
+    role_ID INTEGER PRIMARY KEY
+    guild_ID INTEGER NOT NULL
+    role_Name TEXT NOT NULL
+    permission_Name INTEGER DEFAULT 0
+    );`
+  ).run()
 }
 
 
@@ -139,5 +163,6 @@ function roleManagement() {
   );
   storePermissionTemplatesInDB(permissionRoleNames);
 }
+
 
 export { roleManagement };
