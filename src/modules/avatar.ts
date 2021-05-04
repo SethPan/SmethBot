@@ -1,5 +1,4 @@
-function displayAvatar(msg) {
-  const taggedUser = msg.mentions.users.first();
+function displayAvatar(msg, taggedUser) {
   if (msg.content.startsWith("!avatar") && taggedUser !== msg.author) {
     const user = msg.mentions.users.first() || msg.author;
     msg.channel.send(

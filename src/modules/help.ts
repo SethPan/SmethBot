@@ -45,28 +45,32 @@ const commands = {
   },
 };
 
-function help(msg) {
+function help(msg, taggedUser) {
   const [mention, command, ...args] = msg.content.split(" ");
   const invoked = mention.includes(bot.user.id);
-  if (invoked && command.toLowerCase() === "!help") {
-    let message = [];
-    let i = 0;
-    for (i = 0, message, commands; i < Object.keys(commands).length; i++) {
-      let index = Object.keys(commands)[i];
-      message.push(
-        "__*Name:*__" +
-          ` **${commands[index].name}**` +
-          "\n" +
-          "__*Description:*__" +
-          ` ${commands[index].description}` +
-          "\n" +
-          "__*Example:*__" +
-          ` ${commands[index].example}` +
-          "\n"
-      );
+  if (command === taggedUser) {
+    return;
+  } else {
+    if (invoked && command.toLowerCase() === "!help") {
+      let message = [];
+      let i = 0;
+      for (i = 0, message, commands; i < Object.keys(commands).length; i++) {
+        let index = Object.keys(commands)[i];
+        message.push(
+          "__*Name:*__" +
+            ` **${commands[index].name}**` +
+            "\n" +
+            "__*Description:*__" +
+            ` ${commands[index].description}` +
+            "\n" +
+            "__*Example:*__" +
+            ` ${commands[index].example}` +
+            "\n"
+        );
+      }
+      message.join("\n");
+      msg.channel.send(message);
     }
-    message.join("\n");
-    msg.channel.send(message);
   }
 }
 

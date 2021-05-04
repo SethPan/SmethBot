@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 //require('source-map-support').install()
-    //thing for better errors
+//thing for better errors
 
 //import Discord, { TextChannel } from "discord.js";
 import fs from "fs";
@@ -14,9 +14,10 @@ import { f } from "./modules/f";
 import { kick } from "./modules/kick";
 import { help } from "./modules/help";
 import { roleManagement } from "./modules/roleManagement";
+import { restoreRoles } from "./modules/restoreRoles";
 
 //process.on('unhandledRejection', console.log)
-  //thing for better errors
+//thing for better errors
 
 bot.on("ready", () => {
   console.info(`Logged in as ${bot.user.tag}!`);
@@ -42,13 +43,16 @@ bot.on("message", (msg) => {
   //   .then(kickedID => kickedID.kick())
   //(code to kick)
 
+  const taggedUser = msg.mentions.users.first();
+
   naruto(msg);
   anon(msg);
   botcolor(msg);
-  displayAvatar(msg);
+  displayAvatar(msg, taggedUser);
   f(msg);
   kick(msg);
-  help(msg);
+  help(msg, taggedUser);
+  restoreRoles(msg);
 
   // if (msg.content.startsWith('!hack')) {
   //   if (GET(taggedUser.mfa_enabled) === false) {
