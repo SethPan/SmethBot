@@ -22,7 +22,7 @@ import { restoreRoles } from "./modules/restoreRoles";
 bot.on("ready", () => {
   console.info(`Logged in as ${bot.user.tag}!`);
 
-  roleManagement();
+  //roleManagement();
 
   function resetSmethBotNickname() {
     bot.guilds.cache.forEach((guild) => {

@@ -1,0 +1,57 @@
+body {
+  color: #414141; /* dark grey */
+  background-color: #eeeeee; /* light grey */
+}
+
+.SmethServices {
+  display: block;
+  height: 250px;
+  width: 249px;
+  position: relative;
+  background-image: url("Images/SmethServices.jpeg");
+  background-size: cover;
+}
+
+.SmethServices:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: radial-gradient(circle, transparent 1%, #eeeeee 100%);
+  box-shadow: inset 0px 0px 10px 10px #eeeeee;
+}
+
+.explanation {
+  float: left;
+}
+
+.floatExamples {
+  float: right;
+}
+
+.ExampleImages:visited:hover {
+  color: #21797c;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 34px;
+}
+
+p {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+ul {
+  list-style-type: circle;
+}

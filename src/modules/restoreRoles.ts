@@ -1,11 +1,15 @@
 import { bot } from "./../bot";
 const Database = require("better-sqlite3");
-const db = new Database("smethbot.db");
+const db = new Database("smethbot.db", {
+  // verbose: console.log,
+});
+const fs = require("fs");
 
 function queryDB(msg) {
   const guildID = msg.guild.id;
   const query = `SELECT 
-    role_ID, 
+    role_ID,
+    role_name, 
     CREATE_INSTANT_INVITE, 
     KICK_MEMBERS, 
     BAN_MEMBERS, 
@@ -37,16 +41,20 @@ function queryDB(msg) {
     MANAGE_ROLES, 
     MANAGE_WEBHOOKS, 
     MANAGE_EMOJIS 
-    FROM roles_in_guilds WHERE guild_ID = ?`;
+    FROM roles_in_guilds 
+    WHERE guild_ID = ?`;
   const statement = db.prepare(query);
   const results = statement.all(guildID);
+  console.log("-", guildID, "-");
+  console.log(results);
   return results;
 }
 
 function checkCommandFromAdmin(msg) {
   if (
-    msg.content.startsWith("!restore") &&
+    msg.content.includes("!restore") &&
     msg.member.hasPermission("ADMINISTRATOR")
+    // && msg.member.id !== "812100292375609356"
   ) {
     return true;
   } else {
@@ -55,11 +63,11 @@ function checkCommandFromAdmin(msg) {
 }
 
 function roleMatchingID(idString, msg) {
-  msg.guild.roles.cache.forEach((role) => {
-    console.log(role);
-    console.log("\n\n\n", idString, "\n\n\n");
+  //console.log("-----", idString, "----");
+  return msg.guild.roles.cache.find((role) => {
+    //console.log(role.name, role.id);
     if (role.id === idString) {
-      return role;
+      return true;
     }
   });
 }
@@ -72,7 +80,7 @@ function addBackPermissions(
   guildID
 ) {
   roleIDs.forEach((roleID) => {
-    const idString = roleID.toString();
+    const idString = roleID;
     const role = roleMatchingID(idString, msg);
     const permissionsToAdd = [];
     for (let t = 0; t < roleTemplates.length; t++) {
@@ -88,10 +96,30 @@ function addBackPermissions(
         }
       }
     }
-    // console.log(role);
 
-    //role.setPermissions(permissionsToAdd);
+    if (role) {
+      role.setPermissions(permissionsToAdd);
+    }
   });
+}
+
+function deletePermissionRoles(permissionNames, msg, guildID) {
+  if (guildID === 408000941078347796) {
+    return;
+  } else {
+    permissionNames.forEach((permissionName) => {
+      msg.guild.roles.cache
+        .find((role) => role.name === permissionName)
+        .delete(`Server returned to it's previous state`);
+    });
+  }
+}
+
+function deleteRolesFromDB(guildID) {
+  const sqlInput = `DELETE FROM roles_in_guilds 
+  WHERE guild_ID = ?`;
+  const deleteStatement = db.prepare(sqlInput);
+  deleteStatement.run(guildID);
 }
 
 function restoreRoles(msg) {
@@ -133,12 +161,14 @@ function restoreRoles(msg) {
     "MANAGE_EMOJIS",
   ];
   const roleTemplates = queryDB(msg);
-  console.log("doing the restore command hehe");
   const roleIDs = [];
   for (let j = 0; j < roleTemplates.length; j++) {
+    //console.log(roleTemplates[j]);
     roleIDs.push(roleTemplates[j].role_ID);
   }
   addBackPermissions(permissionNames, roleTemplates, roleIDs, msg, guildID);
+  deletePermissionRoles(permissionNames, msg, guildID);
+  deleteRolesFromDB(guildID);
 }
 
 export { restoreRoles };

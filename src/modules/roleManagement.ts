@@ -269,8 +269,8 @@ VALUES(@role_ID,
 function createTables() {
   db.prepare(
     `CREATE TABLE IF NOT EXISTS roles_in_guilds (
-    role_ID INTEGER PRIMARY KEY,
-    guild_ID INTEGER NOT NULL,
+    role_ID TEXT PRIMARY KEY,
+    guild_ID TEXT NOT NULL,
     role_name TEXT NOT NULL,
     CREATE_INSTANT_INVITE INTEGER DEFAULT 0,
     KICK_MEMBERS INTEGER DEFAULT 0,
@@ -347,6 +347,14 @@ function removePermissionsFromOldRoles(permissionRoleNames) {
   });
 }
 
+function adminRoleIsTopPriority() {
+  bot.guilds.cache.forEach((guild) => {
+    guild.roles.cache
+      .find((role) => role.name === "ADMINISTRATOR")
+      .setPosition(1);
+  });
+}
+
 function roleManagement() {
   const permissionRoleNames = [
     "CREATE_INSTANT_INVITE",
@@ -386,6 +394,7 @@ function roleManagement() {
   );
   organizeRoleData(permissionRoleNames);
   removePermissionsFromOldRoles(permissionRoleNames);
+  adminRoleIsTopPriority(); //to allow management of another admin role, like the SmethBot role;
 }
 
 export { roleManagement };

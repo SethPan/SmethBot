@@ -5,15 +5,28 @@
             Smethbot Documentation
         </title>  
         <meta charset='UTF-8'/>
+        <link rel='stylesheet' href='styles.css'/>
     </head>
+<!-- comment syntax -->
 
+   <!--  <body>
+        <p>CSS lets us style HTML elements. There’s also
+            <a href='dummy.html'>another page</a> associated with this example.</p>
+    </body> -->
 
     <body>
-      <img src='Images/SmethServices.jpeg' width='250' alt='Smeth Services logo'/>
+        <div class='SmethServices' width='250' height='250' alt='Smeth Services logo'>
+    </div>
+    </body>
+    
+
+
+    <body id='FirstBody'>
+      
       <h1>
        Role Permission Management
       </h1>
-       <p>
+       <p class='explanation'>
            Smethbot automatically reorganizes permissions 
            in a way that allows for an individual user's permissions to be added or removed 
            without modifying the permissions on a role used by a greater number of people. 
@@ -22,14 +35,15 @@
            which temporarily changes a user's nickname to a random naruto character, and removes 
            their permission to change it back for the durration. This type of fun discord interaction 
            is not possible with the vanilla way permissions are organized. <br/><br/>
-           This is done by adding a role for every permission to the server, and assinging all
+           This is done by <strong>adding a role for every permission</strong> to the server, and assinging all
            users to roles based on what permissions they already have. They will still have all the same permissions,
            but they will simply be organized differently. Then the bot saves the permissions of your previous roles
            in a database as templates that can be used to restore the server to how it was before anything was changed.
        </p>
+       <img class='floatExamples' src='Images/Permission_Example.png'>
        <ul>
            <li>
-            <a href='Images/Permission_Example.png' target='_blank'>
+            <a class='ExampleImages' href='Images/Permission_Example.png' target='_blank'>
                Here is an example of what permissions may look like for an average user.</a>
              </li>
          </ul>
@@ -42,8 +56,8 @@
       <h1>
        !restore
       </h1>
-       <p>
-           This restores the roles and permissions in the server to their unaltered state,
+       <p class='explanation'>
+           This <strong>restores the roles and permissions in the server to their unaltered state</strong>,
            and stops the bot from automatically reorganizing roles until you tell the bot otherwise.
            This allows you to change the permissions of general roles again without needing to change users'
            permissions individually.
@@ -61,7 +75,7 @@
        <h1>
         @Smethbot !help
        </h1>
-        <p>
+        <p class='explanation'>
             It links you to this page.
             You have to mention smethbot for this command, so that it will not interfere with other bots that may be in the server.
         </p>
@@ -79,9 +93,9 @@
    <h1>
     !anon
    </h1>
-    <p>
+    <p class='explanation'>
         DM'ing this to SmethBot (followed by a message),
-        allows you to send this message anonymously to any channel in any guild you have in common with SmethBot. 
+        allows you to <strong>send this message anonymously</strong> to any channel in any guild you have in common with SmethBot. 
         Unless you specify a guild ID (optional), SmethBot will give you a selection of available options to send the message to.
     </p>
     <ul>
@@ -101,7 +115,7 @@
     <h1>
      !naruto
     </h1>
-     <p>
+     <p class='explanation'>
         This will change your nickname to a random Naruto character in the current discord server.
         You won't be able to change your name back for 2 hours, so you have to live with the character you get.
         SmethBot will message you a unique password and the time you will be allowed to use it, which will return everything to normal.
@@ -124,12 +138,12 @@
     <h1>
         f
     </h1>
-     <p>
-        f
+     <p class='explanation'>
+        <strong>f</strong>
      </p>
      <ul>
         <li>
-           f
+            <strong>f</strong>
           </li>
         </ul>
         <hr/>
@@ -141,7 +155,7 @@
     <h1>
         !botcolor
     </h1>
-     <p>
+     <p class='explanation'>
         This will change SmethBot's name to a random color in the server.
      </p>
      <ul>
@@ -158,8 +172,8 @@
     <h1>
         !avatar
     </h1>
-     <p>
-        SmethBot will post a larger version of the mentioned user's profile picture.
+     <p class='explanation'>
+        SmethBot will post a larger version of the <strong>mentioned user's profile picture</strong>>.
         if you don't mention anyone, it will post your avatar instead. Get a better look.
      </p>
      <ul>
@@ -179,8 +193,8 @@
     <h1>
         !kick
     </h1>
-     <p>
-        This will kick the mentioned user out of the discord channel, but that's a mean thing to do, you cunt.
+     <p class='explanation'>
+        This will <strong>kick the mentioned user</strong> out of the discord channel, but that's a mean thing to do, you cunt.
      </p>
      <ul>
         <li>
