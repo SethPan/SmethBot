@@ -1,3 +1,4 @@
+import { GuildMember } from "discord.js";
 import { bot } from "./../bot";
 
 const Database = require("better-sqlite3");
@@ -42,8 +43,6 @@ function createPermissionObject(guilds, permissionRoleNames) {
     guild.roles.cache.forEach((role) => {
       const roleName = role.name;
       const roleID = role.id;
-      //if (roleName === "new role") role.delete();
-      //^purpose is to remove incorrect roles created from testing
       if (!permissionRoleNames.includes(roleName) && role.editable) {
         const permissions = role.permissions.serialize();
         permissionsPerRolePerGuild[guildID][roleID] = {
@@ -312,16 +311,34 @@ function addUsersToRoles(role) {
   bot.guilds.cache.forEach((guild) =>
     guild.members.cache.forEach((member) => {
       if (member.hasPermission(roleName)) {
-        const roleInServer = guild.roles.cache.find(
-          (role) => role.name === roleName
-        );
-        addRoleToUser(roleInServer, member);
+        const roleInServer = guild.roles.cache.find((role) => {
+          return role.name === roleName;
+        });
+        queue(roleInServer, member);
       }
     })
   );
 }
 
-function addRoleToUser(role, member) {
+const roleAddQueue = [];
+
+function queueEvent(roleInServer, member) {
+  addRoleToUser(roleInServer, member);
+}
+
+function queue(roleInServer, member) {
+  roleAddQueue.push(queueEvent(roleInServer, member));
+}
+
+function run() {
+  const work = roleAddQueue.shift();
+  if (work !== undefined) {
+    work();
+  }
+}
+setInterval(run, 3000);
+
+function addRoleToUser(role, member: GuildMember) {
   member.roles.add(role);
 }
 
@@ -393,7 +410,7 @@ function roleManagement() {
     copyAndAddRolesToServersAndAddUsersToRoles(name)
   );
   organizeRoleData(permissionRoleNames);
-  removePermissionsFromOldRoles(permissionRoleNames);
+  // removePermissionsFromOldRoles(permissionRoleNames);
   adminRoleIsTopPriority(); //to allow management of another admin role, like the SmethBot role;
 }
 

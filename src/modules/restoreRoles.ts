@@ -1,8 +1,11 @@
 import { bot } from "./../bot";
 const Database = require("better-sqlite3");
-const db = new Database("smethbot.db", {
-  // verbose: console.log,
-});
+const db = new Database(
+  "smethbot.db"
+  // , {
+  //   verbose: console.log,
+  // }
+);
 const fs = require("fs");
 
 function queryDB(msg) {
