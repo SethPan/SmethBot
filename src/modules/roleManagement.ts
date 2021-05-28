@@ -308,37 +308,41 @@ function createTables() {
 
 function addUsersToRoles(role) {
   const roleName = role.name;
-  bot.guilds.cache.forEach((guild) =>
+  const roleID = role.ID
+  bot.guilds.cache.forEach((guild) => {
+    const roleInServer = guild.roles.cache.find((role) => {
+      return role.name === roleName;
+    });
     guild.members.cache.forEach((member) => {
+      console.log(roleInServer.members)
       if (member.hasPermission(roleName)) {
-        const roleInServer = guild.roles.cache.find((role) => {
-          return role.name === roleName;
-        });
+        // console.log(member.roles.cache)
+        console.log("---")
+        // console.log(roleInServer)
+        console.log("---")
         queue(roleInServer, member);
       }
     })
+  }
+    
   );
 }
 
 const roleAddQueue = [];
 
-function queueEvent(roleInServer, member) {
-  addRoleToUser(roleInServer, member);
-}
-
 function queue(roleInServer, member) {
-  roleAddQueue.push(queueEvent(roleInServer, member));
+  roleAddQueue.push(() => addRoleToUser(roleInServer, member));
 }
 
-function run() {
+function runQueue() {
   const work = roleAddQueue.shift();
   if (work !== undefined) {
     work();
   }
 }
-setInterval(run, 3000);
+setInterval(runQueue, 1500);
 
-function addRoleToUser(role, member: GuildMember) {
+function addRoleToUser(role, member) {
   member.roles.add(role);
 }
 
@@ -411,7 +415,7 @@ function roleManagement() {
   );
   organizeRoleData(permissionRoleNames);
   // removePermissionsFromOldRoles(permissionRoleNames);
-  adminRoleIsTopPriority(); //to allow management of another admin role, like the SmethBot role;
+  // adminRoleIsTopPriority(); //to allow management of another admin role, like the SmethBot role;
 }
 
 export { roleManagement };
