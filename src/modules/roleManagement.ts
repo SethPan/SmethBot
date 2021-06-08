@@ -1,4 +1,4 @@
-import { GuildMember } from "discord.js";
+import { GuildManager, GuildMember } from "discord.js";
 import { bot } from "./../bot";
 
 const Database = require("better-sqlite3");
@@ -24,8 +24,23 @@ function findGuildsLackingRole(roleSearchedFor) {
   return matchingGuilds;
 }
 
-function createRoleInServer(role, guild) {
-  guild.roles.create({ data: role });
+async function createRoleInServer(role, guild) {
+  // console.log("---------------------");
+  // console.log("role", role.name);
+  // console.log("guild", guild.name);
+  console.log("*", role.name, guild.name);
+  try {
+    const data = await guild.roles.create({ data: role });
+    console.log(data);
+    console.log("---");
+  } catch (e) {
+    console.log("wtf");
+    console.log(e);
+  }
+
+  // console.log("role", role.name);
+  // console.log("guild", guild.name);
+  // console.log("*");
 }
 
 const createRoleQueue = [];
@@ -34,11 +49,11 @@ function pushToCreateRoleQueue(role, guild) {
   createRoleQueue.push(() => createRoleInServer(role, guild));
 }
 
-function matchThenAddRolesToServers(role) {
+async function matchThenAddRolesToServers(role) {
   const guilds = findGuildsLackingRole(role);
   for (let i = 0; i < guilds.length; i++) {
-    pushToCreateRoleQueue(role, guilds[i]);
-    // createRoleInServer(role, guilds[i])
+    // pushToCreateRoleQueue(role, guilds[i]);
+    await createRoleInServer(role, guilds[i]);
   }
 }
 
@@ -329,9 +344,14 @@ function addUsersToRoles(role) {
     const roleInServer = guild.roles.cache.find((role) => {
       return role.name === roleName;
     });
+    if (!roleInServer) {
+      console.log(`Error: ${roleName} not in ${guild.name}`);
+      return;
+    }
     guild.members.cache.forEach((member) => {
       if (member.hasPermission(roleName)) {
-        pushToRoleAddQueue(roleInServer, member);
+        addRoleToUser(roleInServer, member);
+        // pushToRoleAddQueue(roleInServer, member);
       }
     });
   });
@@ -350,23 +370,31 @@ function runRoleAddQueue() {
   }
 }
 
-setTimeout(roleAddInterval, 1500);
+setTimeout(roleAddInterval, 10000);
 function roleAddInterval() {
-  setInterval(runRoleAddQueue, 750);
+  setInterval(runRoleAddQueue, 250);
 }
 
-function addRoleToUser(role, member) {
+function addRoleToUser(role, member: GuildMember) {
   try {
+    // console.log("s");
+    // console.log("role", role?.name);
+    // console.log("member", member?.user.username);
     member.roles.add(role);
+    // console.log("role", role?.name);
+    // console.log("member", member?.user.username);
+    // console.log("e");
   } catch (error) {
-    console.log(error, "\n\n\n----\nfailed to add role to user\n----\n\n\n");
-    pushToRoleAddQueue(role, member);
+    console.log("in the catch block");
+    // console.log(error, "\n\n\n----\nfailed to add role to user\n----\n\n\n");
+    // pushToRoleAddQueue(role, member);
+    // addRoleToUser(role, member);
   }
 }
 
-function copyAndAddRolesToServersAndAddUsersToRoles(name) {
+async function copyAndAddRolesToServersAndAddUsersToRoles(name) {
   const roleToClone = getRoleToCopy(name);
-  matchThenAddRolesToServers(roleToClone);
+  await matchThenAddRolesToServers(roleToClone);
   addUsersToRoles(roleToClone);
 }
 
@@ -430,8 +458,8 @@ function roleManagement() {
     "MANAGE_WEBHOOKS",
     "MANAGE_EMOJIS",
   ];
-  permissionRoleNames.forEach((name) =>
-    copyAndAddRolesToServersAndAddUsersToRoles(name)
+  permissionRoleNames.forEach(
+    async (name) => await copyAndAddRolesToServersAndAddUsersToRoles(name)
   );
   organizeRoleData(permissionRoleNames);
   // removePermissionsFromOldRoles(permissionRoleNames);
