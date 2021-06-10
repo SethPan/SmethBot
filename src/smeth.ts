@@ -34,6 +34,7 @@ bot.on("ready", () => {
   resetSmethBotNickname();
 });
 bot.on("message", (msg) => {
+  console.log(msg.content);
   //if (msg.channel.id !== 714504371286835261) return;
   //for testing channel
 

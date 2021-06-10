@@ -106,6 +106,23 @@ function addBackPermissions(
   });
 }
 
+const deleteRoleQueue = [];
+
+function deleteRolesFromQueue() {
+  const work = deleteRoleQueue.shift();
+  if (work !== undefined) {
+    work();
+  }
+}
+
+setInterval(deleteRolesFromQueue, 500);
+
+function enqueueDeletePermissionRoles(permissionNames, msg, guildID) {
+  deleteRoleQueue.push(() =>
+    deletePermissionRoles(permissionNames, msg, guildID)
+  );
+}
+
 function deletePermissionRoles(permissionNames, msg, guildID) {
   if (guildID === 408000941078347796) {
     return;
@@ -113,7 +130,7 @@ function deletePermissionRoles(permissionNames, msg, guildID) {
     permissionNames.forEach((permissionName) => {
       msg.guild.roles.cache
         .find((role) => role.name === permissionName)
-        .delete(`Server returned to it's previous state`);
+        ?.delete(`Server returned to it's previous state`);
     });
   }
 }
@@ -170,7 +187,7 @@ function restoreRoles(msg) {
     roleIDs.push(roleTemplates[j].role_ID);
   }
   addBackPermissions(permissionNames, roleTemplates, roleIDs, msg, guildID);
-  deletePermissionRoles(permissionNames, msg, guildID);
+  enqueueDeletePermissionRoles(permissionNames, msg, guildID);
   deleteRolesFromDB(guildID);
 }
 
