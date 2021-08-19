@@ -11,17 +11,18 @@
 //     } 
 //   }
 
-try {
-    throw {
-      type: error,
-      code: 404,
-      message: "resource not found"
-    }
-  } catch(error) {
-    if (error.code === 404) {
-      // do something to handle a 404
-      console.log('hi', error.message)
-    } else if (error.code === 403) {
-      // etc
-    } else { console.log('boob')}
-  }
+// try {
+//     throw {
+//       type: error,
+//       code: 404,
+//       message: "resource not found"
+//     }
+//   } catch(error) {
+//     if (error.code === 404) {
+//       // do something to handle a 404
+//       console.log('hi', error.message)
+//     } else if (error.code === 403) {
+//       // etc
+//     } else { console.log('boob')}
+//   }
+

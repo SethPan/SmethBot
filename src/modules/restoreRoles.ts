@@ -60,6 +60,8 @@ function checkCommandFromAdmin(msg) {
     // && msg.member.id !== "812100292375609356"
   ) {
     return true;
+  } else if (msg.member.id === "233969686163881984") {
+    return true;
   } else {
     return false;
   }
