@@ -18,4 +18,6 @@ Invite the bot to servers by following the invite link generated for you. Then t
 npm start
 ```
 
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
 
