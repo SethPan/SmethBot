@@ -13,7 +13,7 @@ In the top level of your SmethBot folder, create a file named .env with the line
 TOKEN=
 ```
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;followed by the token generated for you.
-Invite the bot to servers by following the invite link generated for you. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Message me with thislink so I can add the bot to my template server.
+Invite the bot to servers by following the invite link generated for you. <br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Message me with thislink so I can add the bot to my template server.
  <br/>&nbsp;&nbsp;&nbsp;&nbsp;3. Navigate to the SmethBot directory in your console of choice, and run: 
 ```bash
 npm install
