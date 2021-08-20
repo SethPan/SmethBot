@@ -23,6 +23,8 @@ npm install
 npm start
 ```
 
+## [Documentation](https://sethpan.github.io/SmethBot/)
+
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
 
