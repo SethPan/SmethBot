@@ -31,7 +31,6 @@ async function createRoleInServer(role, guild) {
   console.log("*", role.name, guild.name);
   try {
     const data = await guild.roles.create({ data: role });
-    console.log(data);
     console.log("---");
   } catch (e) {
     console.log("wtf");
