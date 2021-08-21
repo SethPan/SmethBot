@@ -158,7 +158,7 @@
     <h1>!kick</h1>
     <p class="explanation">
       This will <strong>kick the mentioned user</strong> out of the discord
-      channel, but that's a mean thing to do, you cunt.
+      channel, but that's a mean thing to do.
     </p>
     <ul>
       <li>!kick @SomeIdiot</li>
